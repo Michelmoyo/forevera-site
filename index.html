@@ -101,6 +101,7 @@ h3{font-size:1rem;line-height:1.35;font-weight:700;color:var(--encre)}
 .ctrl button:hover{background:rgba(255,255,255,.15)}
 .ctrl .barre{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
 .ctrl .barre span{display:block;height:100%;width:0;background:var(--soleil)}
+.son-auto{position:absolute;top:12px;left:12px;display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px 8px 10px;border:0;border-radius:999px;background:var(--soleil);color:var(--encre);font:700 .8125rem var(--corps);cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .ctrl .temps{flex:none;font-size:.75rem;font-weight:600;font-variant-numeric:tabular-nums}
 .lecture{position:absolute;inset:0;margin:auto;width:68px;height:68px;border-radius:50%;border:0;background:var(--soleil);cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .lecture:hover{transform:scale(1.05)}
@@ -473,7 +474,7 @@ form.test{display:grid;gap:16px}
   </div>
 </footer>
 
-<script src="config.js?v=4"></script>
+<script src="config.js?v=5"></script>
 <script>
 (function(){
   var C = window.FOREVERA || {};
@@ -533,7 +534,10 @@ form.test{display:grid;gap:16px}
   // Lecteur sans avance rapide : lecture/pause, son, plein écran.
   // La barre de progression s'affiche mais ne se manipule pas ; toute tentative
   // d'avancer (clavier, plein écran natif, vitesse) est annulée.
-  function lecteurVerrouille(box, url, titre){
+  // opts.auto : lecture automatique sans le son quand la vidéo est visible ;
+  // « Activer le son » la reprend du début avec le son.
+  function lecteurVerrouille(box, url, titre, opts){
+    opts = opts || {};
     var ic = {
       play: '<path d="M8 5l12 7-12 7z"/>',
       pause: '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>',
@@ -551,7 +555,8 @@ form.test{display:grid;gap:16px}
         '<span class="temps">0:00 / 0:00</span>' +
         '<button type="button" data-a="son" aria-label="Couper le son">' + svg("son") + "</button>" +
         '<button type="button" data-a="plein" aria-label="Plein écran">' + svg("plein") + "</button>" +
-      "</div>";
+      "</div>" +
+      (opts.auto ? '<button type="button" class="son-auto">' + svg("son") + "<span>Activer le son</span></button>" : "");
     var v = $("video", box), bLire = $('[data-a="lire"]', box), bSon = $('[data-a="son"]', box), barre = $(".barre span", box), temps = $(".temps", box);
     var vu = 0; // position la plus avancée réellement regardée
     var fmt = function(s){ s = Math.max(0, Math.floor(s)) || 0; return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); };
@@ -570,10 +575,22 @@ form.test{display:grid;gap:16px}
       bSon.innerHTML = svg(v.muted ? "muet" : "son"); bSon.setAttribute("aria-label", v.muted ? "Remettre le son" : "Couper le son");
     };
     ["play", "pause", "volumechange", "ended"].forEach(function(ev){ v.addEventListener(ev, maj); });
-    var basculer = function(){ if (v.paused) v.play().catch(function(){}); else v.pause(); };
+    var pauseVoulue = false; // le visiteur a mis en pause lui-même : pas de reprise automatique
+    var sonAuto = $(".son-auto", box);
+    var activerSon = function(){
+      if (!sonAuto) return false;
+      sonAuto.remove(); sonAuto = null; opts.auto = false;
+      v.muted = false; v.currentTime = 0; pauseVoulue = false; v.play().catch(function(){});
+      return true;
+    };
+    var basculer = function(){
+      if (activerSon()) return;
+      if (v.paused) { pauseVoulue = false; v.play().catch(function(){}); } else { pauseVoulue = true; v.pause(); }
+    };
     bLire.addEventListener("click", basculer);
     v.addEventListener("click", basculer);
-    bSon.addEventListener("click", function(){ v.muted = !v.muted; });
+    bSon.addEventListener("click", function(){ if (!activerSon()) v.muted = !v.muted; });
+    if (sonAuto) sonAuto.addEventListener("click", activerSon);
     $('[data-a="plein"]', box).addEventListener("click", function(){
       if (document.fullscreenElement) { document.exitFullscreen(); return; }
       if (box.requestFullscreen) box.requestFullscreen();
@@ -582,16 +599,29 @@ form.test{display:grid;gap:16px}
     // Pause quand la vidéo sort de l'écran (sauf en plein écran) ou quand l'onglet est masqué
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function(e){
-        if (e[0].intersectionRatio < 0.25 && !v.paused && !document.fullscreenElement && !v.webkitDisplayingFullscreen) v.pause();
-      }, { threshold: 0.25 }).observe(box);
+        var r = e[0].intersectionRatio;
+        if (r < 0.25 && !v.paused && !document.fullscreenElement && !v.webkitDisplayingFullscreen) v.pause();
+        else if (opts.auto && r >= 0.5 && v.paused && !pauseVoulue && !v.ended && !document.hidden) v.play().catch(maj);
+      }, { threshold: [0, 0.25, 0.5] }).observe(box);
     }
     document.addEventListener("visibilitychange", function(){ if (document.hidden && !v.paused) v.pause(); });
     // Une seule vidéo à la fois
     v.addEventListener("play", function(){ $$("video").forEach(function(o){ if (o !== v && !o.paused) o.pause(); }); });
-    v.play().catch(maj);
+    if (opts.auto) {
+      v.muted = true; v.defaultMuted = true; v.preload = "metadata"; if (opts.affiche) v.poster = opts.affiche; maj();
+      if (!("IntersectionObserver" in window)) v.play().catch(maj);
+    } else {
+      v.play().catch(maj);
+    }
   }
   var mAcc = $("#media-accroche");
-  if (C.videoAccroche) lecteur(mAcc, C.videoAccroche, "Forever expliqué simplement", mAcc.innerHTML);
+  // Lecture automatique (sans le son) de la vidéo de l'accroche, sauf si le
+  // visiteur a activé l'économie de données ou a une connexion très lente.
+  var cx = navigator.connection || {};
+  var economie = cx.saveData || /(^|-)2g$/.test(cx.effectiveType || "");
+  if (C.videoAccroche && C.autoplayAccroche && !economie && /\.(mp4|webm)(\?|$)/i.test(C.videoAccroche)) {
+    lecteurVerrouille(mAcc, C.videoAccroche, "Forever expliqué simplement", { auto: true, affiche: "assets/hero-1200.webp" });
+  } else if (C.videoAccroche) lecteur(mAcc, C.videoAccroche, "Forever expliqué simplement", mAcc.innerHTML);
 
   // Témoignages
   var T = (C.temoignages || []).filter(function(t){ return t && (t.video || t.citation); });

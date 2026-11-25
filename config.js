@@ -19,6 +19,11 @@ window.FOREVERA = {
   // Vidéo de Jean-Baptiste Revelat (chaîne MyAloe), utilisée avec son accord.
   videoAccroche: "assets/video/forever-opportunite-480p.mp4",
 
+  // Lecture automatique de cette vidéo, sans le son, quand elle est visible
+  // (seulement pour une vidéo du site, pas YouTube). false = au clic.
+  // Désactivée d'office si le visiteur économise ses données ou est en 2G.
+  autoplayAccroche: true,
+
   // Témoignages. La section reste cachée tant que la liste est vide.
   // Publiez uniquement des témoignages réels, avec l'accord des personnes.
   temoignages: [
