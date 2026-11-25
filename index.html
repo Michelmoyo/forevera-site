@@ -579,6 +579,15 @@ form.test{display:grid;gap:16px}
       if (box.requestFullscreen) box.requestFullscreen();
       else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
     });
+    // Pause quand la vidéo sort de l'écran (sauf en plein écran) ou quand l'onglet est masqué
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function(e){
+        if (e[0].intersectionRatio < 0.25 && !v.paused && !document.fullscreenElement && !v.webkitDisplayingFullscreen) v.pause();
+      }, { threshold: 0.25 }).observe(box);
+    }
+    document.addEventListener("visibilitychange", function(){ if (document.hidden && !v.paused) v.pause(); });
+    // Une seule vidéo à la fois
+    v.addEventListener("play", function(){ $$("video").forEach(function(o){ if (o !== v && !o.paused) o.pause(); }); });
     v.play().catch(maj);
   }
   var mAcc = $("#media-accroche");
