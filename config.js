@@ -14,8 +14,10 @@ window.FOREVERA = {
   // Vide = le bouton « Réserver une rencontre » ouvre WhatsApp.
   rencontreUrl: "",
 
-  // Vidéo de 90 s de l'accroche (lien YouTube). Vide = photo seule.
-  videoAccroche: "https://www.youtube.com/watch?v=MgG--BL7WuY",
+  // Vidéo de l'accroche : lien YouTube, ou fichier du site (ex. "assets/video/...mp4").
+  // Vide = photo seule.
+  // Vidéo de Jean-Baptiste Revelat (chaîne MyAloe), utilisée avec son accord.
+  videoAccroche: "assets/video/forever-opportunite-480p.mp4",
 
   // Témoignages. La section reste cachée tant que la liste est vide.
   // Publiez uniquement des témoignages réels, avec l'accord des personnes.

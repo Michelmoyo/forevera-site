@@ -91,7 +91,8 @@ h3{font-size:1rem;line-height:1.35;font-weight:700;color:var(--encre)}
 .accroche .texte{display:grid;gap:16px}
 .accroche p.lede{color:var(--encre);opacity:.85}
 .media{position:relative;border-radius:var(--rayon);overflow:hidden;background:var(--sable);aspect-ratio:16/9}
-.media img,.media iframe{width:100%;height:100%;object-fit:cover;border:0}
+.media img,.media iframe,.media video{width:100%;height:100%;object-fit:cover;border:0}
+.media video{object-fit:contain;background:#000}
 .lecture{position:absolute;inset:0;margin:auto;width:68px;height:68px;border-radius:50%;border:0;background:var(--soleil);cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .lecture:hover{transform:scale(1.05)}
 .cout{background:var(--creme);border-radius:var(--rayon);padding:18px;display:grid;gap:4px}
@@ -463,7 +464,7 @@ form.test{display:grid;gap:16px}
   </div>
 </footer>
 
-<script src="config.js?v=2"></script>
+<script src="config.js?v=3"></script>
 <script>
 (function(){
   var C = window.FOREVERA || {};
@@ -504,13 +505,21 @@ form.test{display:grid;gap:16px}
   });
   $$(".menu-groupe").forEach(function(g){ if (!$$("a:not([hidden])", g).length) g.hidden = true; });
 
-  // Vidéo : affiche une miniature, charge YouTube seulement au clic
+  // Vidéo : affiche une miniature, ne charge la vidéo (YouTube ou fichier du site) qu'au clic
   function lecteur(box, url, titre, imgHtml){
-    var id = ytId(url); if (!id) return false;
-    box.innerHTML = (imgHtml || '<img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">') +
+    var fichier = /\.(mp4|webm)(\?|$)/i.test(String(url || ""));
+    var id = fichier ? "" : ytId(url); if (!fichier && !id) return false;
+    var vignette = imgHtml || (id ? '<img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">' : "");
+    box.innerHTML = vignette +
       '<button class="lecture" type="button" aria-label="Lire la vidéo : ' + titre + '"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l12 7-12 7z" fill="#231F20"/></svg></button>';
     $(".lecture", box).addEventListener("click", function(){
-      box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" title="' + titre + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      if (fichier) {
+        var v = document.createElement("video");
+        v.src = url; v.controls = true; v.autoplay = true; v.playsInline = true; v.preload = "auto"; v.setAttribute("title", titre);
+        box.innerHTML = ""; box.appendChild(v); v.play().catch(function(){});
+      } else {
+        box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" title="' + titre + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      }
     });
     return true;
   }
