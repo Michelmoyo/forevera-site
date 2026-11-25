@@ -30,9 +30,9 @@ La section « Prêt à démarrer ? » enregistre chaque demande dans un Google S
 
 | Statut | Règle | Ce que voit la personne |
 | --- | --- | --- |
-| **Qualifié** | Veut l'activité, peut acheter le pack sous 3 mois, au moins 5 h par semaine, peut venir à une rencontre (ou en ligne) | Invitation à réserver une rencontre |
-| **Plus tard** | Achat « plus tard », moins de 5 h par semaine ou pas de rencontre possible | Proposition de commencer comme client, recontact plus tard |
-| **Client** | Veut seulement les produits, ou ne peut pas acheter le pack | Proposition de commencer comme client |
+| **Qualifié** | Veut l'activité, prêt à acheter le pack, au moins 5 h par semaine, peut venir à une rencontre (ou en ligne) | Invitation à réserver une rencontre |
+| **Plus tard** | Pas encore prêt à acheter, moins de 5 h par semaine ou pas de rencontre possible | Proposition de commencer comme client, recontact plus tard |
+| **Client** | Veut seulement les produits, ou répond « Non » à l'achat du pack | Proposition de commencer comme client |
 
 Mise en place, une seule fois :
 

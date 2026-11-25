@@ -464,13 +464,12 @@ form.test{display:grid;gap:20px;max-width:640px}
             </select>
           </div>
           <div class="champ">
-            <label for="achat">Pour démarrer comme partenaire, on achète le pack Start Your Journey (492,59 $ de produits). Quand pourriez-vous faire cet achat ?</label>
+            <label for="achat">Pour démarrer comme partenaire, on achète le pack Start Your Journey (492,59 $ de produits). Êtes-vous prêt à acheter ?</label>
             <select id="achat" required>
               <option value="">Choisir…</option>
-              <option value="mois">Ce mois-ci</option>
-              <option value="3mois">Dans 1 à 3 mois</option>
-              <option value="plustard">Plus tard</option>
-              <option value="non">Je ne peux pas pour l'instant</option>
+              <option value="oui">Oui, je suis prêt</option>
+              <option value="pasencore">Pas encore</option>
+              <option value="non">Non</option>
             </select>
           </div>
           <div class="champ">
@@ -522,7 +521,7 @@ form.test{display:grid;gap:20px;max-width:640px}
   </div>
 </footer>
 
-<script src="config.js?v=7"></script>
+<script src="config.js?v=8"></script>
 <script>
 (function(){
   var C = window.FOREVERA || {};
@@ -717,7 +716,7 @@ form.test{display:grid;gap:20px;max-width:640px}
   var form = $("#test"), res = $("#resultat"), err = $("#erreur");
   var txt = {
     objectif: { revenu: "avoir un revenu en plus", activite: "lancer ma propre activité", produits: "utiliser les produits" },
-    achat: { mois: "ce mois-ci", "3mois": "dans 1 à 3 mois", plustard: "plus tard", non: "pas pour l'instant" },
+    achat: { oui: "prêt à acheter", pasencore: "pas encore prêt", non: "non" },
     temps: { 1: "moins de 5 h", 2: "5 à 10 h", 3: "plus de 10 h" },
     rencontre: { oui: "oui", ligne: "plutôt en ligne", non: "non" },
     connu: { pub: "publicité", proche: "un proche", whatsapp: "message WhatsApp", autre: "autre" }
@@ -734,10 +733,10 @@ form.test{display:grid;gap:20px;max-width:640px}
     if (d.charAt(0) === "0") d = d.slice(1);
     return /^[89]\d{8}$/.test(d) ? "+243" + d : "";
   }
-  // Qualifié : veut l'activité, peut acheter sous 3 mois, a au moins 5 h par semaine et peut se déplacer.
+  // Qualifié : veut l'activité, est prêt à acheter le pack, a au moins 5 h par semaine et peut se déplacer.
   function statut(r){
     if (r.objectif === "produits" || r.achat === "non") return "Client";
-    if (r.achat !== "plustard" && r.temps >= 2 && r.rencontre !== "non") return "Qualifié";
+    if (r.achat === "oui" && r.temps >= 2 && r.rencontre !== "non") return "Qualifié";
     return "Plus tard";
   }
   function envoyer(d){
@@ -784,7 +783,7 @@ form.test{display:grid;gap:20px;max-width:640px}
         '<div class="btns">' + bouton("Commencer comme client", num ? wa("Bonjour, je viens de remplir le formulaire sur votre site. " + resume + " Je souhaite commencer comme client.") : "", true) + "</div>";
     } else {
       html = "<h3>Pas encore, et c'est normal</h3><p class=\"doux\">" + (r.temps === 1 ? "L'activité demande du temps chaque semaine. " : "") +
-        (r.achat === "plustard" ? "Pour démarrer comme partenaire, on achète le pack Start Your Journey (492,59 $ de produits). En attendant, vous pouvez commencer comme client privilégié. " : "") +
+        (r.achat === "pasencore" ? "Pour démarrer comme partenaire, on achète le pack Start Your Journey (492,59 $ de produits). En attendant, vous pouvez commencer comme client privilégié. " : "") +
         "Nous vous recontacterons plus tard sur WhatsApp, quand ce sera le bon moment pour vous.</p>" +
         '<div class="btns">' + bouton("Commencer comme client", num ? wa("Bonjour, je viens de remplir le formulaire sur votre site. " + resume + " Je souhaite commencer comme client en attendant.") : "", false) + "</div>";
     }
