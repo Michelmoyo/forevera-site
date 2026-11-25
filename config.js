@@ -32,9 +32,9 @@ window.FOREVERA = {
   // Pages et sites liés, affichés dans le menu quand ils existent.
   liens: {
     produits: "",                    // ex. "/produits/"
-    blog: "",                        // ex. "https://blog.forevera.store"
+    blog: "",                        // ex. "https://blog.forevera.io"
     aPropos: "",                     // ex. "/a-propos/"
     contact: "",                     // ex. "/contact/"
-    espacePartenaire: ""             // ex. "https://espace.forevera.store"
+    espacePartenaire: ""             // ex. "https://espace.forevera.io"
   }
 };

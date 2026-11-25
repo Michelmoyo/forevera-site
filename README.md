@@ -32,7 +32,7 @@ Les vidéos sont des liens **YouTube** (une vidéo « non répertoriée » suffi
 4. Cliquer sur **Créer**, puis **Déployer**.
 5. Pour publier automatiquement à chaque modification, activer le **déploiement automatique** dans Hostinger et ajouter l'URL du webhook fournie dans GitHub, dans **Settings → Webhooks**.
 
-Les balises de partage (`og:image`, `canonical`) utilisent le domaine `https://forevera.store/`. Si le site est publié sur un autre domaine, remplacer ce domaine dans `index.html`.
+Les balises de partage (`og:image`, `canonical`) utilisent le domaine `https://forevera.io/`. Si le site est publié sur un autre domaine, remplacer ce domaine dans `index.html`.
 
 ## Avant de publier
 
