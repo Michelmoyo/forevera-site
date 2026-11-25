@@ -1,6 +1,6 @@
 # Les pages et les réglages sont revérifiés à chaque visite,
 # pour qu'une modification de config.js ou index.html soit visible tout de suite.
-# Les images et le logo restent en cache 7 jours.
+# Les images, le logo et les vidéos restent en cache 7 jours.
 <IfModule mod_headers.c>
   <FilesMatch "\.(html|js|txt)$">
     Header set Cache-Control "no-cache"
@@ -9,3 +9,7 @@
     Header set Cache-Control "public, max-age=604800"
   </FilesMatch>
 </IfModule>
+
+# Fichiers du dépôt qui n'ont pas à être publics
+RedirectMatch 404 ^/(apps-script|\.git)(/|$)
+RedirectMatch 404 ^/README\.md$

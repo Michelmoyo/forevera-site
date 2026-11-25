@@ -22,7 +22,27 @@ Tant qu'une valeur est vide (`""`), l'élément correspondant reste **caché** s
 - `voyage.video` : sans vidéo, la section des voyages est cachée.
 - `liens` : chaque page (produits, blog, à propos, contact, espace partenaire) apparaît dans le menu dès que son lien est rempli.
 
-Les vidéos sont des liens **YouTube** (une vidéo « non répertoriée » suffit). Elles ne se chargent qu'au clic, pour que la page reste rapide.
+Les vidéos sont des liens **YouTube**, ou des fichiers du site (`assets/video/…mp4`) lus par un lecteur sans avance rapide.
+
+## Formulaire de démarrage (Google Sheet)
+
+La section « Prêt à démarrer ? » enregistre chaque demande dans un Google Sheet, avec un **statut** :
+
+| Statut | Règle | Ce que voit la personne |
+| --- | --- | --- |
+| **Qualifié** | Veut l'activité, peut acheter le pack sous 3 mois, au moins 5 h par semaine, peut venir à une rencontre (ou en ligne) | Invitation à réserver une rencontre |
+| **Plus tard** | Achat « plus tard », moins de 5 h par semaine ou pas de rencontre possible | Proposition de commencer comme client, recontact plus tard |
+| **Client** | Veut seulement les produits, ou ne peut pas acheter le pack | Proposition de commencer comme client |
+
+Mise en place, une seule fois :
+
+1. Créer un Google Sheet, par exemple « Forevera - Demandes de démarrage ».
+2. **Extensions → Apps Script**, remplacer le contenu de `Code.gs` par `apps-script/Code.gs`, enregistrer.
+3. Choisir la fonction `initialiser`, cliquer sur **Exécuter** et autoriser l'accès.
+4. **Déployer → Nouveau déploiement → Application Web**. Exécuter en tant que : **Moi**. Qui a accès : **Tout le monde**.
+5. Copier l'URL qui finit par `/exec` dans `config.js`, à `formulaireUrl`.
+
+Le jeton `formulaireJeton` de `config.js` doit rester identique à `TOKEN` dans `Code.gs`.
 
 ## Mettre en ligne sur Hostinger (déploiement Git)
 

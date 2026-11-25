@@ -14,6 +14,13 @@ window.FOREVERA = {
   // Vide = le bouton « Réserver une rencontre » ouvre WhatsApp.
   rencontreUrl: "",
 
+  // Formulaire de démarrage (section « Prêt à démarrer ? ») : URL de l'application
+  // Web Google Apps Script (…/exec), voir apps-script/Code.gs.
+  // Vide = les réponses ne sont pas enregistrées.
+  formulaireUrl: "",
+  // Doit être identique à TOKEN dans apps-script/Code.gs.
+  formulaireJeton: "fvd_UGxg4yJ2qJCQTrBv4NarPw",
+
   // Vidéo de l'accroche : lien YouTube, ou fichier du site (ex. "assets/video/...mp4").
   // Vide = photo seule.
   // Vidéo de Jean-Baptiste Revelat (chaîne MyAloe), utilisée avec son accord.

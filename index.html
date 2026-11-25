@@ -159,12 +159,23 @@ h3{font-size:1rem;line-height:1.35;font-weight:700;color:var(--encre)}
 .faq .reponse{padding:0 0 18px;font-size:.875rem;color:var(--doux);display:grid;gap:8px}
 
 /* Test */
-form.test{display:grid;gap:16px}
+form.test{display:grid;gap:20px;max-width:640px}
+.resultat{max-width:640px}
 .champ{display:grid;gap:6px}
 .champ label{font-weight:600;color:var(--encre)}
 .champ select{appearance:none;width:100%;min-height:52px;padding:0 40px 0 14px;border:1.5px solid var(--ligne);border-radius:8px;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235F5753' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center;
   font:500 .9375rem var(--corps);color:var(--encre)}
-.champ select:focus{border-color:var(--encre);outline:none}
+.champ select:focus,.champ input:focus{border-color:var(--encre);outline:none}
+.champ input{width:100%;min-height:52px;padding:0 14px;border:1.5px solid var(--ligne);border-radius:8px;background:var(--blanc);font:500 .9375rem var(--corps);color:var(--encre)}
+.champ [aria-invalid="true"]{border-color:#A8321E}
+.indicatif{display:flex;align-items:stretch}
+.indicatif span{display:grid;place-items:center;padding:0 12px;border:1.5px solid var(--ligne);border-right:0;border-radius:8px 0 0 8px;background:var(--creme);font-weight:700;color:var(--encre)}
+.indicatif input{border-radius:0 8px 8px 0}
+.groupe{border:0;margin:0;padding:0;display:grid;gap:14px}
+.groupe legend{padding:0;margin-bottom:4px;font:700 .6875rem var(--corps);letter-spacing:.12em;text-transform:uppercase;color:var(--doux)}
+.deux{display:grid;gap:14px}
+@media (min-width:560px){.deux{grid-template-columns:1fr 1fr}}
+.case a{color:var(--encre);font-weight:700}
 .case{display:flex;gap:12px;align-items:flex-start;font-weight:500;color:var(--encre);cursor:pointer}
 .case input{width:22px;height:22px;margin:0;accent-color:var(--encre);flex:none}
 .erreur{color:#A8321E;font-weight:600;font-size:.875rem}
@@ -210,7 +221,7 @@ form.test{display:grid;gap:16px}
       <a href="#fonctionnement">Comment ça marche</a>
       <a href="#commencer">Commencer</a>
       <a href="#revenus">Les revenus</a>
-      <a href="#pret">Êtes-vous prêt ?</a>
+      <a href="#pret">Démarrer</a>
     </nav>
     <div class="actions">
       <a class="btn btn-contour btn-petit" data-wa="Bonjour, je découvre l'activité Forever sur votre site et j'ai une question." hidden>WhatsApp</a>
@@ -236,7 +247,7 @@ form.test{display:grid;gap:16px}
       <a href="#revenus">Les revenus</a>
       <a href="#temoignages" data-si="temoignages">Témoignages</a>
       <a href="#famille">Questions des proches</a>
-      <a href="#pret">Êtes-vous prêt ?</a>
+      <a href="#pret">Démarrer</a>
     </div>
     <div class="menu-groupe" data-groupe-liens>
       <p class="surtitre">Aller plus loin</p>
@@ -426,39 +437,76 @@ form.test{display:grid;gap:16px}
   <!-- 7. Êtes-vous prêt ? -->
   <section class="section bg-blanc" id="pret">
     <div class="wrap">
-      <h2>Êtes-vous prêt ?</h2>
-      <p class="lede">4 questions pour savoir quelle étape vous convient. Vos réponses restent sur votre téléphone.</p>
+      <h2>Prêt à démarrer ?</h2>
+      <p class="lede">Répondez en 2 minutes. Vos réponses nous permettent de préparer une rencontre utile, ou de vous proposer une autre étape si ce n'est pas le bon moment.</p>
       <form class="test" id="test" novalidate>
-        <div class="champ">
-          <label for="objectif">Votre objectif</label>
-          <select id="objectif" required>
-            <option value="">Choisir…</option>
-            <option value="revenu">Avoir un revenu en plus</option>
-            <option value="activite">Lancer ma propre activité</option>
-            <option value="produits">Utiliser les produits</option>
-          </select>
-        </div>
-        <div class="champ">
-          <label for="budget">Budget pour démarrer</label>
-          <select id="budget" required>
-            <option value="">Choisir…</option>
-            <option value="1">Moins de 100 $</option>
-            <option value="2">De 100 à 400 $</option>
-            <option value="3">Plus de 400 $</option>
-          </select>
-        </div>
-        <div class="champ">
-          <label for="temps">Temps disponible par semaine</label>
-          <select id="temps" required>
-            <option value="">Choisir…</option>
-            <option value="1">Moins de 5 heures</option>
-            <option value="2">De 5 à 10 heures</option>
-            <option value="3">Plus de 10 heures</option>
-          </select>
-        </div>
-        <label class="case"><input type="checkbox" id="lu"> J'ai lu les coûts et les conditions</label>
+        <fieldset class="groupe">
+          <legend>Vous</legend>
+          <div class="deux">
+            <div class="champ"><label for="prenom">Prénom</label><input id="prenom" autocomplete="given-name" maxlength="60" required></div>
+            <div class="champ"><label for="nom">Nom</label><input id="nom" autocomplete="family-name" maxlength="60" required></div>
+          </div>
+          <div class="champ">
+            <label for="whatsapp">Numéro WhatsApp</label>
+            <div class="indicatif"><span>+243</span><input id="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="81 234 5678" maxlength="16" required></div>
+          </div>
+          <div class="champ"><label for="commune">Commune ou ville</label><input id="commune" maxlength="60" placeholder="Ex. Gombe, Limete, Lubumbashi…" required></div>
+        </fieldset>
+        <fieldset class="groupe">
+          <legend>Votre projet</legend>
+          <div class="champ">
+            <label for="objectif">Votre objectif</label>
+            <select id="objectif" required>
+              <option value="">Choisir…</option>
+              <option value="revenu">Avoir un revenu en plus</option>
+              <option value="activite">Lancer ma propre activité</option>
+              <option value="produits">Seulement utiliser les produits</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="achat">Pour démarrer comme partenaire, on achète le pack Start Your Journey (492,59 $ de produits). Quand pourriez-vous faire cet achat ?</label>
+            <select id="achat" required>
+              <option value="">Choisir…</option>
+              <option value="mois">Ce mois-ci</option>
+              <option value="3mois">Dans 1 à 3 mois</option>
+              <option value="plustard">Plus tard</option>
+              <option value="non">Je ne peux pas pour l'instant</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="temps">Temps disponible par semaine pour l'activité</label>
+            <select id="temps" required>
+              <option value="">Choisir…</option>
+              <option value="1">Moins de 5 heures</option>
+              <option value="2">De 5 à 10 heures</option>
+              <option value="3">Plus de 10 heures</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="rencontre">Pouvez-vous venir à une rencontre en personne à Kinshasa ?</label>
+            <select id="rencontre" required>
+              <option value="">Choisir…</option>
+              <option value="oui">Oui</option>
+              <option value="ligne">Je préfère en ligne</option>
+              <option value="non">Non</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="connu">Comment nous avez-vous connus ?</label>
+            <select id="connu" required>
+              <option value="">Choisir…</option>
+              <option value="pub">Une publicité (Facebook, Instagram…)</option>
+              <option value="proche">Un proche ou un ami</option>
+              <option value="whatsapp">Un message WhatsApp</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+        </fieldset>
+        <label class="case"><input type="checkbox" id="lu" required> J'ai lu les <a href="#commencer">coûts</a> et les <a href="#revenus">conditions</a> de l'activité</label>
+        <label class="case"><input type="checkbox" id="accord" required> J'accepte que Forevera store me contacte sur WhatsApp au sujet de ma demande</label>
         <p class="erreur" id="erreur" role="alert" hidden></p>
-        <div class="btns"><button class="btn btn-plein" type="submit">Voir mon résultat</button></div>
+        <div class="btns"><button class="btn btn-plein" type="submit" id="envoyer">Envoyer mes réponses</button></div>
+        <p class="mention">Vos réponses sont envoyées à Forevera store et servent uniquement à vous recontacter au sujet de votre démarrage. Elles ne sont ni vendues ni partagées.</p>
       </form>
       <div class="resultat" id="resultat" tabindex="-1" hidden aria-live="polite"></div>
     </div>
@@ -474,7 +522,7 @@ form.test{display:grid;gap:16px}
   </div>
 </footer>
 
-<script src="config.js?v=5"></script>
+<script src="config.js?v=6"></script>
 <script>
 (function(){
   var C = window.FOREVERA || {};
@@ -665,42 +713,82 @@ form.test{display:grid;gap:16px}
     else { window.open("https://wa.me/?text=" + encodeURIComponent(txt + url), "_blank", "noopener"); }
   });
 
-  // Test « Êtes-vous prêt ? »
+  // Formulaire de démarrage : filtre les curieux et enregistre les réponses dans le Google Sheet
   var form = $("#test"), res = $("#resultat"), err = $("#erreur");
   var txt = {
     objectif: { revenu: "avoir un revenu en plus", activite: "lancer ma propre activité", produits: "utiliser les produits" },
-    budget: { 1: "moins de 100 $", 2: "de 100 à 400 $", 3: "plus de 400 $" },
-    temps: { 1: "moins de 5 h", 2: "5 à 10 h", 3: "plus de 10 h" }
+    achat: { mois: "ce mois-ci", "3mois": "dans 1 à 3 mois", plustard: "plus tard", non: "pas pour l'instant" },
+    temps: { 1: "moins de 5 h", 2: "5 à 10 h", 3: "plus de 10 h" },
+    rencontre: { oui: "oui", ligne: "plutôt en ligne", non: "non" },
+    connu: { pub: "publicité", proche: "un proche", whatsapp: "message WhatsApp", autre: "autre" }
   };
   function bouton(label, href, plein){
     if (!href) return "";
     var ext = /^https?:/.test(href) ? ' target="_blank" rel="noopener"' : "";
     return '<a class="btn ' + (plein ? "btn-plein" : "btn-contour") + '" href="' + href + '"' + ext + ">" + label + "</a>";
   }
+  // 081 234 5678, 812345678, +243 81 234 5678 ou 243812345678 donnent +243812345678
+  function numero(v){
+    var d = String(v || "").replace(/\D/g, "");
+    if (d.indexOf("243") === 0) d = d.slice(3);
+    if (d.charAt(0) === "0") d = d.slice(1);
+    return /^[89]\d{8}$/.test(d) ? "+243" + d : "";
+  }
+  // Qualifié : veut l'activité, peut acheter sous 3 mois, a au moins 5 h par semaine et peut se déplacer.
+  function statut(r){
+    if (r.objectif === "produits" || r.achat === "non") return "Client";
+    if (r.achat !== "plustard" && r.temps >= 2 && r.rencontre !== "non") return "Qualifié";
+    return "Plus tard";
+  }
+  function envoyer(d){
+    if (!C.formulaireUrl) return;
+    var body = JSON.stringify(d);
+    try {
+      fetch(C.formulaireUrl, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: body }).catch(function(){
+        if (navigator.sendBeacon) navigator.sendBeacon(C.formulaireUrl, new Blob([body], { type: "text/plain;charset=utf-8" }));
+      });
+    } catch (e) {}
+  }
   form.addEventListener("submit", function(e){
     e.preventDefault();
-    var o = $("#objectif").value, b = +$("#budget").value, t = +$("#temps").value, lu = $("#lu").checked;
-    if (!o || !b || !t) { err.textContent = "Répondez aux 3 questions pour voir votre résultat."; err.hidden = false; return; }
+    var champs = ["prenom", "nom", "whatsapp", "commune", "objectif", "achat", "temps", "rencontre", "connu"];
+    var r = {}, manque = [];
+    champs.forEach(function(k){ var el = $("#" + k); r[k] = el.value.trim(); el.removeAttribute("aria-invalid"); if (!r[k]) { manque.push(el); } });
+    var tel = numero(r.whatsapp);
+    if (r.whatsapp && !tel) manque.push($("#whatsapp"));
+    manque.forEach(function(el){ el.setAttribute("aria-invalid", "true"); });
+    var msg = "";
+    if (manque.length) msg = r.whatsapp && !tel ? "Vérifiez le numéro WhatsApp : 9 chiffres après +243, par exemple 81 234 5678." : "Répondez à toutes les questions.";
+    else if (!$("#lu").checked) msg = "Lisez d'abord les coûts et les conditions, puis cochez la case.";
+    else if (!$("#accord").checked) msg = "Cochez la case pour que nous puissions vous recontacter.";
+    if (msg) { err.textContent = msg; err.hidden = false; (manque[0] || $("#lu")).focus(); return; }
     err.hidden = true;
-    var resume = "Objectif : " + txt.objectif[o] + ". Budget : " + txt.budget[b] + ". Temps : " + txt.temps[t] + ".";
-    var rdv = C.rencontreUrl || (num ? wa("Bonjour, j'ai fait le test sur votre site. " + resume + " Je souhaite réserver une rencontre.") : "");
-    var html;
-    if (!lu) {
-      html = "<h3>Lisez d'abord les coûts</h3><p class=\"doux\">Pour décider en connaissance de cause, prenez 2 minutes pour lire les façons de commencer et les conditions.</p>" +
-        '<div class="btns">' + bouton("Voir les chiffres", "#commencer", true) + "</div>";
-    } else if (o === "produits" || b === 1) {
-      html = "<h3>Commencez comme client</h3><p class=\"doux\">Découvrez d'abord les produits, sans engagement. Vous pourrez évoluer plus tard si l'activité vous intéresse.</p>" +
-        '<div class="btns">' + bouton("Commencer comme client", num ? wa("Bonjour, j'ai fait le test sur votre site. " + resume + " Je souhaite commencer comme client.") : "", true) + "</div>";
-    } else if (b === 3 && t >= 2) {
-      html = "<h3>Vous êtes prêt à en parler</h3><p class=\"doux\">Rencontrons-nous pour répondre à vos questions et voir ensemble comment démarrer.</p>" +
+    r.temps = +r.temps; r.whatsapp = tel;
+    var st = statut(r);
+    var q = new URLSearchParams(location.search);
+    envoyer({
+      jeton: C.formulaireJeton || "", prenom: r.prenom, nom: r.nom, whatsapp: tel, commune: r.commune,
+      objectif: txt.objectif[r.objectif], achat: txt.achat[r.achat], temps: txt.temps[r.temps],
+      rencontre: txt.rencontre[r.rencontre], connu: txt.connu[r.connu], statut: st,
+      utm_source: q.get("utm_source") || "", utm_campaign: q.get("utm_campaign") || "",
+      page: location.href.slice(0, 300), referrer: document.referrer.slice(0, 300), user_agent: navigator.userAgent.slice(0, 300)
+    });
+    var resume = "Je m'appelle " + r.prenom + " " + r.nom + " (" + r.commune + "). Objectif : " + txt.objectif[r.objectif] + ". Achat du pack : " + txt.achat[r.achat] + ". Temps : " + txt.temps[r.temps] + ".";
+    var rdv = C.rencontreUrl || (num ? wa("Bonjour, je viens de remplir le formulaire de démarrage sur votre site. " + resume + " Je souhaite réserver une rencontre.") : "");
+    var html, recu = "<p class=\"mention\">" + (C.formulaireUrl ? "Vos réponses ont bien été envoyées à Forevera store." : "Le formulaire n'est pas encore relié au Google Sheet : vos réponses n'ont pas été enregistrées.") + "</p>";
+    if (st === "Qualifié") {
+      html = "<h3>Merci " + r.prenom.replace(/[<>&"]/g, "") + ", parlons-en</h3><p class=\"doux\">Votre projet correspond au démarrage de l'activité. Nous vous contactons sur WhatsApp pour fixer une rencontre" + (r.rencontre === "ligne" ? " en ligne" : "") + ".</p>" +
         '<div class="btns">' + bouton("Réserver une rencontre", rdv, true) + "</div>";
+    } else if (st === "Client") {
+      html = "<h3>Commencez comme client</h3><p class=\"doux\">Découvrez d'abord les produits, sans engagement. Vous pourrez évoluer plus tard si l'activité vous intéresse.</p>" +
+        '<div class="btns">' + bouton("Commencer comme client", num ? wa("Bonjour, je viens de remplir le formulaire sur votre site. " + resume + " Je souhaite commencer comme client.") : "", true) + "</div>";
     } else {
-      html = "<h3>Pas encore, et c'est normal</h3><p class=\"doux\">" + (t === 1 ? "L'activité demande du temps chaque semaine. " : "") + (b === 2 ? "Pour démarrer l'activité, on achète le pack Start Your Journey (492,59 $ de produits). Vous pouvez commencer comme client privilégié en attendant. " : "") +
-        "Nous pouvons vous recontacter quand vous serez prêt.</p>" +
-        '<div class="btns">' + bouton("Me recontacter dans 30 jours", num ? wa("Bonjour, j'ai fait le test sur votre site. " + resume + " Pouvez-vous me recontacter dans 30 jours ?") : "", true) + bouton("Réserver quand même une rencontre", rdv, false) + "</div>";
+      html = "<h3>Pas encore, et c'est normal</h3><p class=\"doux\">" + (r.temps === 1 ? "L'activité demande du temps chaque semaine. " : "") +
+        (r.achat === "plustard" ? "Pour démarrer comme partenaire, on achète le pack Start Your Journey (492,59 $ de produits). En attendant, vous pouvez commencer comme client privilégié. " : "") +
+        "Nous vous recontacterons plus tard sur WhatsApp, quand ce sera le bon moment pour vous.</p>" +
+        '<div class="btns">' + bouton("Commencer comme client", num ? wa("Bonjour, je viens de remplir le formulaire sur votre site. " + resume + " Je souhaite commencer comme client en attendant.") : "", false) + "</div>";
     }
-    if (!num && !C.rencontreUrl && lu) html += '<p class="mention">Les coordonnées de Forevera store seront bientôt disponibles sur cette page.</p>';
-    res.innerHTML = html; res.hidden = false; res.focus();
+    res.innerHTML = html + recu; res.hidden = false; form.hidden = true; res.focus();
   });
 })();
 </script>
