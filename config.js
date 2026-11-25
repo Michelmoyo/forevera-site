@@ -17,7 +17,7 @@ window.FOREVERA = {
   // Formulaire de démarrage (section « Prêt à démarrer ? ») : URL de l'application
   // Web Google Apps Script (…/exec), voir apps-script/Code.gs.
   // Vide = les réponses ne sont pas enregistrées.
-  formulaireUrl: "",
+  formulaireUrl: "https://script.google.com/macros/s/AKfycby2Nr-nQ0rQU2tcHhywRtJLQgZl4Rqr6kwuW0GN2-bHpeFi9hohWfdwn6V0DCOshzUh/exec",
   // Doit être identique à TOKEN dans apps-script/Code.gs.
   formulaireJeton: "fvd_UGxg4yJ2qJCQTrBv4NarPw",
 
