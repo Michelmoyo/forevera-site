@@ -15,7 +15,7 @@ window.FOREVERA = {
   rencontreUrl: "",
 
   // Vidéo de 90 s de l'accroche (lien YouTube). Vide = photo seule.
-  videoAccroche: "",
+  videoAccroche: "https://www.youtube.com/watch?v=MgG--BL7WuY",
 
   // Témoignages. La section reste cachée tant que la liste est vide.
   // Publiez uniquement des témoignages réels, avec l'accord des personnes.
