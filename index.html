@@ -93,6 +93,15 @@ h3{font-size:1rem;line-height:1.35;font-weight:700;color:var(--encre)}
 .media{position:relative;border-radius:var(--rayon);overflow:hidden;background:var(--sable);aspect-ratio:16/9}
 .media img,.media iframe,.media video{width:100%;height:100%;object-fit:cover;border:0}
 .media video{object-fit:contain;background:#000}
+.lecteur{background:#000}
+.lecteur video{cursor:pointer}
+.lecteur:fullscreen{border-radius:0;aspect-ratio:auto}
+.ctrl{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:6px;padding:8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff}
+.ctrl button{flex:none;width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:6px;background:transparent;color:#fff;cursor:pointer}
+.ctrl button:hover{background:rgba(255,255,255,.15)}
+.ctrl .barre{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+.ctrl .barre span{display:block;height:100%;width:0;background:var(--soleil)}
+.ctrl .temps{flex:none;font-size:.75rem;font-weight:600;font-variant-numeric:tabular-nums}
 .lecture{position:absolute;inset:0;margin:auto;width:68px;height:68px;border-radius:50%;border:0;background:var(--soleil);cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .lecture:hover{transform:scale(1.05)}
 .cout{background:var(--creme);border-radius:var(--rayon);padding:18px;display:grid;gap:4px}
@@ -514,14 +523,63 @@ form.test{display:grid;gap:16px}
       '<button class="lecture" type="button" aria-label="Lire la vidéo : ' + titre + '"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l12 7-12 7z" fill="#231F20"/></svg></button>';
     $(".lecture", box).addEventListener("click", function(){
       if (fichier) {
-        var v = document.createElement("video");
-        v.src = url; v.controls = true; v.autoplay = true; v.playsInline = true; v.preload = "auto"; v.setAttribute("title", titre);
-        box.innerHTML = ""; box.appendChild(v); v.play().catch(function(){});
+        lecteurVerrouille(box, url, titre);
       } else {
         box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" title="' + titre + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
       }
     });
     return true;
+  }
+  // Lecteur sans avance rapide : lecture/pause, son, plein écran.
+  // La barre de progression s'affiche mais ne se manipule pas ; toute tentative
+  // d'avancer (clavier, plein écran natif, vitesse) est annulée.
+  function lecteurVerrouille(box, url, titre){
+    var ic = {
+      play: '<path d="M8 5l12 7-12 7z"/>',
+      pause: '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>',
+      son: '<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+      muet: '<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+      plein: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+    };
+    var svg = function(k){ return '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + ic[k] + "</svg>"; };
+    box.classList.add("lecteur");
+    box.innerHTML =
+      '<video playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" title="' + titre + '"></video>' +
+      '<div class="ctrl">' +
+        '<button type="button" data-a="lire" aria-label="Pause">' + svg("pause") + "</button>" +
+        '<div class="barre" aria-hidden="true"><span></span></div>' +
+        '<span class="temps">0:00 / 0:00</span>' +
+        '<button type="button" data-a="son" aria-label="Couper le son">' + svg("son") + "</button>" +
+        '<button type="button" data-a="plein" aria-label="Plein écran">' + svg("plein") + "</button>" +
+      "</div>";
+    var v = $("video", box), bLire = $('[data-a="lire"]', box), bSon = $('[data-a="son"]', box), barre = $(".barre span", box), temps = $(".temps", box);
+    var vu = 0; // position la plus avancée réellement regardée
+    var fmt = function(s){ s = Math.max(0, Math.floor(s)) || 0; return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); };
+    v.src = url;
+    v.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+    box.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+    v.addEventListener("timeupdate", function(){
+      if (!v.seeking && v.currentTime > vu && v.currentTime - vu < 1.5) vu = v.currentTime;
+      barre.style.width = (v.duration ? v.currentTime / v.duration * 100 : 0) + "%";
+      temps.textContent = fmt(v.currentTime) + " / " + fmt(v.duration);
+    });
+    v.addEventListener("seeking", function(){ if (v.currentTime > vu + 0.5) v.currentTime = vu; });
+    v.addEventListener("ratechange", function(){ if (v.playbackRate !== 1) v.playbackRate = 1; });
+    var maj = function(){
+      bLire.innerHTML = svg(v.paused ? "play" : "pause"); bLire.setAttribute("aria-label", v.paused ? "Lire" : "Pause");
+      bSon.innerHTML = svg(v.muted ? "muet" : "son"); bSon.setAttribute("aria-label", v.muted ? "Remettre le son" : "Couper le son");
+    };
+    ["play", "pause", "volumechange", "ended"].forEach(function(ev){ v.addEventListener(ev, maj); });
+    var basculer = function(){ if (v.paused) v.play().catch(function(){}); else v.pause(); };
+    bLire.addEventListener("click", basculer);
+    v.addEventListener("click", basculer);
+    bSon.addEventListener("click", function(){ v.muted = !v.muted; });
+    $('[data-a="plein"]', box).addEventListener("click", function(){
+      if (document.fullscreenElement) { document.exitFullscreen(); return; }
+      if (box.requestFullscreen) box.requestFullscreen();
+      else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    });
+    v.play().catch(maj);
   }
   var mAcc = $("#media-accroche");
   if (C.videoAccroche) lecteur(mAcc, C.videoAccroche, "Forever expliqué simplement", mAcc.innerHTML);
