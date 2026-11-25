@@ -1,0 +1,11 @@
+# Les pages et les réglages sont revérifiés à chaque visite,
+# pour qu'une modification de config.js ou index.html soit visible tout de suite.
+# Les images et le logo restent en cache 7 jours.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(webp|jpg|png|svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
