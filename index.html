@@ -270,8 +270,8 @@ form.test{display:grid;gap:16px}
       </div>
       <div class="texte">
         <div class="cout">
-          <strong>Démarrage à partir de 492,59 $</strong>
-          <span class="mention">Pack Start Your Journey (2 CC). Ou commencez simplement comme client.</span>
+          <strong>Achetez le pack Start Your Journey pour démarrer : 492,59 $</strong>
+          <span class="mention">C'est un achat, pas un investissement : vous recevez 2 CC de produits à utiliser ou à revendre. Vous pouvez aussi commencer comme simple client.</span>
         </div>
         <div class="btns">
           <a class="btn btn-plein" href="#fonctionnement">Commencer la découverte</a>
@@ -335,7 +335,7 @@ form.test{display:grid;gap:16px}
         <article class="carte recommande">
           <span class="etiquette">Pour démarrer l'activité</span>
           <h3>Partenaire (FBO)</h3>
-          <p>Pack Start Your Journey : 2 CC de produits à utiliser ou à revendre. Acheter 2 CC au détail coûte environ 680 $.</p>
+          <p>Pour démarrer, vous achetez le pack Start Your Journey : 2 CC de produits à utiliser ou à revendre. Acheter ces 2 CC au détail coûterait environ 680 $.</p>
           <span class="prix">492,59 $</span>
         </article>
       </div>
@@ -695,7 +695,7 @@ form.test{display:grid;gap:16px}
       html = "<h3>Vous êtes prêt à en parler</h3><p class=\"doux\">Rencontrons-nous pour répondre à vos questions et voir ensemble comment démarrer.</p>" +
         '<div class="btns">' + bouton("Réserver une rencontre", rdv, true) + "</div>";
     } else {
-      html = "<h3>Pas encore, et c'est normal</h3><p class=\"doux\">" + (t === 1 ? "L'activité demande du temps chaque semaine. " : "") + (b === 2 ? "Le pack de démarrage coûte 492,59 $. Vous pouvez commencer comme client privilégié en attendant. " : "") +
+      html = "<h3>Pas encore, et c'est normal</h3><p class=\"doux\">" + (t === 1 ? "L'activité demande du temps chaque semaine. " : "") + (b === 2 ? "Pour démarrer l'activité, on achète le pack Start Your Journey (492,59 $ de produits). Vous pouvez commencer comme client privilégié en attendant. " : "") +
         "Nous pouvons vous recontacter quand vous serez prêt.</p>" +
         '<div class="btns">' + bouton("Me recontacter dans 30 jours", num ? wa("Bonjour, j'ai fait le test sur votre site. " + resume + " Pouvez-vous me recontacter dans 30 jours ?") : "", true) + bouton("Réserver quand même une rencontre", rdv, false) + "</div>";
     }
