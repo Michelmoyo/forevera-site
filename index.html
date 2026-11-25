@@ -377,7 +377,7 @@ form.test{display:grid;gap:16px}
   <section class="section bg-encre" id="voyages" hidden>
     <div class="wrap">
       <h2>Forever récompense les objectifs atteints</h2>
-      <p class="lede">Chaque année, Forever invite des partenaires qualifiés à des voyages et événements internationaux. Voici ce que notre équipe y a vécu.</p>
+      <p class="lede">Chaque année, Forever invite des partenaires qualifiés à des voyages et événements internationaux. Voici un aperçu de l'un de ces événements.</p>
       <div class="media" id="media-voyage"></div>
       <p class="mention" id="legende-voyage" style="color:var(--creme)"></p>
       <div class="conditions">
@@ -473,7 +473,7 @@ form.test{display:grid;gap:16px}
   </div>
 </footer>
 
-<script src="config.js?v=3"></script>
+<script src="config.js?v=4"></script>
 <script>
 (function(){
   var C = window.FOREVERA || {};
@@ -601,7 +601,8 @@ form.test{display:grid;gap:16px}
   } else { $$('[data-si="temoignages"]').forEach(function(a){ a.hidden = true; }); }
 
   // Voyage
-  if (C.voyage && C.voyage.video && lecteur($("#media-voyage"), C.voyage.video, "Vidéo du voyage")) {
+  if (C.voyage && C.voyage.video && lecteur($("#media-voyage"), C.voyage.video, "Vidéo du voyage",
+      C.voyage.affiche ? '<img src="' + C.voyage.affiche + '" alt="" loading="lazy" width="960" height="540">' : "")) {
     $("#legende-voyage").textContent = C.voyage.legende || "";
     $("#voyages").hidden = false;
   }

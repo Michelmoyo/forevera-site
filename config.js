@@ -27,8 +27,9 @@ window.FOREVERA = {
 
   // Vidéo du voyage. La section reste cachée tant que la vidéo est vide.
   voyage: {
-    video: "",                       // lien YouTube
-    legende: ""                      // ex. "Nom de l'événement, ville, année"
+    video: "assets/video/emr-2025-phuket-720p.mp4",   // lien YouTube ou fichier du site
+    affiche: "assets/emr-2025-phuket.webp",            // image affichée avant la lecture
+    legende: "Eagle Manager Retreat 2025, Phuket (Thaïlande), du 26 au 30 septembre 2025"
   },
 
   // Pages et sites liés, affichés dans le menu quand ils existent.
