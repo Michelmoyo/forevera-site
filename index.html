@@ -161,6 +161,11 @@ h3{font-size:1rem;line-height:1.35;font-weight:700;color:var(--encre)}
 /* Test */
 form.test{display:grid;gap:20px;max-width:640px}
 .resultat{max-width:640px}
+/* Le formulaire ressort : section jaune, carte blanche bordée et ombrée */
+.zone-form .wrap{justify-items:center;text-align:center}
+.zone-form .lede{color:var(--encre);opacity:.85;margin-inline:auto}
+.zone-form form.test,.zone-form .resultat{width:100%;text-align:left;background:var(--blanc);border:2px solid var(--encre);border-radius:16px;padding:28px 20px;box-shadow:0 12px 0 var(--encre),0 24px 48px rgba(35,31,32,.18);margin-bottom:12px}
+@media (min-width:720px){.zone-form form.test,.zone-form .resultat{padding:36px 40px}}
 .champ{display:grid;gap:6px}
 .champ label{font-weight:600;color:var(--encre)}
 .champ select{appearance:none;width:100%;min-height:52px;padding:0 40px 0 14px;border:1.5px solid var(--ligne);border-radius:8px;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235F5753' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center;
@@ -170,7 +175,10 @@ form.test{display:grid;gap:20px;max-width:640px}
 .champ [aria-invalid="true"]{border-color:#A8321E}
 .indicatif{display:flex;align-items:stretch}
 .indicatif span{display:grid;place-items:center;padding:0 12px;border:1.5px solid var(--ligne);border-right:0;border-radius:8px 0 0 8px;background:var(--creme);font-weight:700;color:var(--encre)}
-.indicatif input{border-radius:0 8px 8px 0}
+.indicatif input{border-radius:0 8px 8px 0;flex:1;min-width:0}
+.champ,.champ select,.champ input,.groupe,.deux > *{min-width:0}
+form.test,.groupe,.champ{grid-template-columns:minmax(0,1fr)}
+.zone-form form.test,.zone-form .resultat{min-width:0;max-width:640px}
 .groupe{border:0;margin:0;padding:0;display:grid;gap:14px}
 .groupe legend{padding:0;margin-bottom:4px;font:700 .6875rem var(--corps);letter-spacing:.12em;text-transform:uppercase;color:var(--doux)}
 .deux{display:grid;gap:14px}
@@ -435,8 +443,9 @@ form.test{display:grid;gap:20px;max-width:640px}
   </section>
 
   <!-- 7. Êtes-vous prêt ? -->
-  <section class="section bg-blanc" id="pret">
+  <section class="section bg-soleil zone-form" id="pret">
     <div class="wrap">
+      <p class="surtitre">Dernière étape</p>
       <h2>Prêt à démarrer ?</h2>
       <p class="lede">Répondez en 2 minutes. Vos réponses nous permettent de préparer une rencontre utile, ou de vous proposer une autre étape si ce n'est pas le bon moment.</p>
       <form class="test" id="test" novalidate>
@@ -501,8 +510,8 @@ form.test{display:grid;gap:20px;max-width:640px}
             </select>
           </div>
         </fieldset>
-        <label class="case"><input type="checkbox" id="lu" required> J'ai lu les <a href="#commencer">coûts</a> et les <a href="#revenus">conditions</a> de l'activité</label>
-        <label class="case"><input type="checkbox" id="accord" required> J'accepte que Forevera store me contacte sur WhatsApp au sujet de ma demande</label>
+        <label class="case"><input type="checkbox" id="lu" required> <span>J'ai lu les <a href="#commencer">coûts</a> et les <a href="#revenus">conditions</a> de l'activité</span></label>
+        <label class="case"><input type="checkbox" id="accord" required> <span>J'accepte que Forevera store me contacte sur WhatsApp au sujet de ma demande</span></label>
         <p class="erreur" id="erreur" role="alert" hidden></p>
         <div class="btns"><button class="btn btn-plein" type="submit" id="envoyer">Envoyer mes réponses</button></div>
         <p class="mention">Vos réponses sont envoyées à Forevera store et servent uniquement à vous recontacter au sujet de votre démarrage. Elles ne sont ni vendues ni partagées.</p>
